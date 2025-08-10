@@ -1,0 +1,40 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+out/
+
+# Build outputs
+target/
+build/
+bin/
+
+# Java
+*.class
+*.log
+*.tmp
+hs_err_pid*
+replay_pid*
+
+# Packages
+*.jar
+*.war
+*.ear
+
+# Maven
+dependency-reduced-pom.xml
+
+# Logs
+logs/
+*.log
+
+# Env & Secrets
+.env
+*.env
