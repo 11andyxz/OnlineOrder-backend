@@ -1,0 +1,17 @@
+com\example\common\dto\MenuDtos.class
+com\example\common\dto\MenuDtos$MenuItemView.class
+com\example\common\dto\MenuDtos$UpsertMenuItemRequest.class
+com\example\common\dto\CartDtos$AddItemRequest.class
+com\example\common\dto\UserDtos.class
+com\example\common\dto\OrderDtos$OrderView.class
+com\example\common\dto\CartDtos$CartItem.class
+com\example\common\dto\OrderDtos$Item.class
+com\example\common\dto\OrderDtos.class
+com\example\common\api\ApiResponse.class
+com\example\common\dto\OrderDtos$CreateOrderRequest.class
+com\example\common\dto\UserDtos$LoginRequest.class
+com\example\common\dto\CartDtos.class
+com\example\common\dto\CartDtos$CartView.class
+com\example\common\dto\OrderDtos$OrderStatus.class
+com\example\common\dto\UserDtos$RegisterRequest.class
+com\example\common\dto\UserDtos$UserView.class

@@ -1,0 +1,4 @@
+com\example\menu\domain\MenuItem.class
+com\example\menu\repo\MenuRepository.class
+com\example\menu\MenuServiceApplication.class
+com\example\menu\web\MenuController.class
