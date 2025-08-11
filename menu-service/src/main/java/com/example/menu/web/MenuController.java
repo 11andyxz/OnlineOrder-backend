@@ -4,8 +4,8 @@ import com.example.common.api.ApiResponse;
 import com.example.common.dto.MenuDtos;
 import com.example.menu.domain.MenuItem;
 import com.example.menu.repo.MenuRepository;
+import com.example.menu.service.MenuService;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,17 +15,18 @@ import java.util.List;
 @RequestMapping("/api/menu")
 public class MenuController {
     private final MenuRepository menuRepository;
+    private final MenuService menuService;
 
-    public MenuController(MenuRepository menuRepository) {
+    public MenuController(MenuRepository menuRepository, MenuService menuService) {
         this.menuRepository = menuRepository;
+        this.menuService = menuService;
     }
 
     @GetMapping
-    @Cacheable("menu:list")
     public ResponseEntity<?> list() {
-        List<MenuItem> items = menuRepository.findAll();
+        List<MenuItem> items = menuService.listMenuItems();
         return ResponseEntity.ok(ApiResponse.ok(items));
-        }
+    }
 
     @PostMapping
     @CacheEvict(value = "menu:list", allEntries = true)
