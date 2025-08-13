@@ -7,6 +7,9 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.math.BigDecimal;
 
@@ -32,8 +35,23 @@ public class OrderService {
         order.setStatus(OrderDtos.OrderStatus.CREATED);
         order = orderRepository.save(order);
 
-        kafkaTemplate.send(new ProducerRecord<>("order-status", order.getId().toString(), order.getId() + ":PAID"));
+        Long orderId = order.getId();
+        if (TransactionSynchronizationManager.isActualTransactionActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    publishOrderStatusAsync(orderId, "PAID");
+                }
+            });
+        } else {
+            publishOrderStatusAsync(orderId, "PAID");
+        }
         return order;
+    }
+
+    @Async("appTaskExecutor")
+    public void publishOrderStatusAsync(Long orderId, String status) {  
+        kafkaTemplate.send(new ProducerRecord<>("order-status", orderId.toString(), orderId + ":" + status));
     }
 }
 

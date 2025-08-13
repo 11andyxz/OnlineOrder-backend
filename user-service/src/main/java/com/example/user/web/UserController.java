@@ -6,24 +6,29 @@ import com.example.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final Executor appTaskExecutor;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, @Qualifier("appTaskExecutor") Executor appTaskExecutor) {
         this.userService = userService;
+        this.appTaskExecutor = appTaskExecutor;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserDtos.RegisterRequest request) {
-        return ResponseEntity.ok(ApiResponse.ok(userService.register(request)));
+    public CompletableFuture<ResponseEntity<?>> register(@Valid @RequestBody UserDtos.RegisterRequest request) {
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(ApiResponse.ok(userService.register(request))), appTaskExecutor);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserDtos.LoginRequest request) {
-        return ResponseEntity.ok(ApiResponse.ok(userService.login(request)));
+    public CompletableFuture<ResponseEntity<?>> login(@Valid @RequestBody UserDtos.LoginRequest request) {
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(ApiResponse.ok(userService.login(request))), appTaskExecutor);
     }
 }
 

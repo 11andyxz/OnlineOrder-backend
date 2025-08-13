@@ -10,22 +10,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {
     private final MenuRepository menuRepository;
     private final MenuService menuService;
+    private final Executor appTaskExecutor;
 
-    public MenuController(MenuRepository menuRepository, MenuService menuService) {
+    public MenuController(MenuRepository menuRepository, MenuService menuService, @Qualifier("appTaskExecutor") Executor appTaskExecutor) {
         this.menuRepository = menuRepository;
         this.menuService = menuService;
+        this.appTaskExecutor = appTaskExecutor;
     }
 
     @GetMapping
-    public ResponseEntity<?> list() {
-        List<MenuItem> items = menuService.listMenuItems();
-        return ResponseEntity.ok(ApiResponse.ok(items));
+    public CompletableFuture<ResponseEntity<?>> list() {
+        return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(ApiResponse.ok(menuService.listMenuItems())), appTaskExecutor);
     }
 
     @PostMapping
