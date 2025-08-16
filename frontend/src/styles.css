@@ -1,0 +1,27 @@
+:root {
+  --bg: #0b1220;
+  --card: #111827;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0f172a, #0b1220);
+  background-attachment: fixed;
+}
+
+.ant-layout, .ant-layout-content, .ant-layout-footer {
+  background: transparent !important;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 12px;
+}
+
+
