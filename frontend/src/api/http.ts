@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { ApiResponse } from './types';
 import { useAuthStore } from '@store/auth';
-
+import type { AxiosRequestConfig } from 'axios';
 export const http = axios.create({
   baseURL: '/api'
 });
@@ -37,7 +37,7 @@ export function get<T>(url: string, config?: Parameters<typeof http.get>[1]) {
 export function post<TRes, TReq = unknown>(
   url: string,
   data?: TReq,
-  config?: Parameters<typeof http.post>[2]
+  config?: AxiosRequestConfig<TReq>
 ) {
   return http.post<TRes, TRes, TReq>(url, data, config);
 }
@@ -45,7 +45,7 @@ export function post<TRes, TReq = unknown>(
 export function put<TRes, TReq = unknown>(
   url: string,
   data?: TReq,
-  config?: Parameters<typeof http.put>[2]
+  config?: AxiosRequestConfig<TReq>
 ) {
   return http.put<TRes, TRes, TReq>(url, data, config);
 }
