@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { listMenu } from '@api/menu';
 import { addItem } from '@api/cart';
 import { useAuthStore } from '@store/auth';
-import { Row, Col, message, Empty } from 'antd';
+import { Row, Col, message, Empty, Skeleton } from 'antd';
 import MenuCard from '@components/MenuCard';
 import type { MenuItemView } from '@api/types';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +28,17 @@ export default function MenuPage() {
     }
   });
 
-  if (isLoading) return <div style={{ color: '#fff' }}>加载中...</div>;
+  if (isLoading) return (
+    <Row gutter={[16, 16]}>
+      {Array.from({ length: 8 }).map((_, i) => (
+        <Col key={i} xs={24} sm={12} md={8} lg={6}>
+          <div className="glass-card" style={{ padding: 16 }}>
+            <Skeleton active paragraph={{ rows: 2 }} title style={{ margin: 0 }} />
+          </div>
+        </Col>
+      ))}
+    </Row>
+  );
 
   const items = (data ?? []) as MenuItemView[];
   if (!items.length) return <Empty description="暂无菜品" />;

@@ -6,6 +6,7 @@ import { useNavigate, Link } from 'react-router-dom';
 export default function Register() {
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
+  // const user = useAuthStore((state) => state.user);
 
   const onFinish = async (values: { name: string; email: string; password: string }) => {
     try {

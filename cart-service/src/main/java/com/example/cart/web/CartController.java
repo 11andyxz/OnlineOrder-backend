@@ -22,7 +22,7 @@ public class CartController {
     private String key(Long userId) { return "cart:" + userId; }
 
     @PostMapping("/{userId}/add")
-    public ResponseEntity<?> add(@PathVariable Long userId, @RequestBody CartDtos.AddItemRequest request) {
+    public ResponseEntity<?> add(@PathVariable("userId") Long userId, @RequestBody CartDtos.AddItemRequest request) {
         List<CartDtos.CartItem> items = getItems(userId);
         CartDtos.CartItem found = items.stream()
                 .filter(i -> i.getMenuItemId().equals(request.getMenuItemId()))
@@ -42,7 +42,7 @@ public class CartController {
     }
 
     @PostMapping("/{userId}/remove/{menuItemId}")
-    public ResponseEntity<?> remove(@PathVariable Long userId, @PathVariable Long menuItemId) {
+    public ResponseEntity<?> remove(@PathVariable("userId") Long userId, @PathVariable("menuItemId") Long menuItemId) {
         List<CartDtos.CartItem> items = getItems(userId);
         items.removeIf(i -> i.getMenuItemId().equals(menuItemId));
         redisTemplate.opsForValue().set(key(userId), items);
@@ -50,7 +50,7 @@ public class CartController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<?> get(@PathVariable Long userId) {
+    public ResponseEntity<?> get(@PathVariable("userId") Long userId) {
         List<CartDtos.CartItem> items = getItems(userId);
         return ResponseEntity.ok(ApiResponse.ok(view(items)));
     }

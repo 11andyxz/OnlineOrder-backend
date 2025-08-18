@@ -41,7 +41,7 @@ export default function CartPage() {
 
   return (
     <Space direction="vertical" style={{ width: '100%' }} size={16}>
-      <Card className="glass-card">
+      <Card className="glass-card fade-in">
         <List
           dataSource={items}
           renderItem={(it) => (

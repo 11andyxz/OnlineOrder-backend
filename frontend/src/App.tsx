@@ -28,14 +28,14 @@ export default function App() {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header style={{ position: 'sticky', top: 0, zIndex: 10, display: 'flex', alignItems: 'center' }}>
-        <div style={{ color: '#fff', fontWeight: 700, marginRight: 24 }}>Online Ordering</div>
+      <Header className="glass-nav" style={{ position: 'sticky', top: 0, zIndex: 10, display: 'flex', alignItems: 'center' }}>
+        <div style={{ color: '#fff', fontWeight: 800, letterSpacing: .3, marginRight: 24 }}>Online Ordering</div>
         <AntMenu
           theme="dark"
           mode="horizontal"
           selectedKeys={[location.pathname === '/' ? '/' : location.pathname]}
           items={items}
-          style={{ flex: 1, minWidth: 200 }}
+          style={{ flex: 1, minWidth: 200, background: 'transparent' }}
         />
         <Space>
           {user ? (
@@ -57,7 +57,7 @@ export default function App() {
           )}
         </Space>
       </Header>
-      <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+      <Content style={{ padding: '32px 24px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
         <Routes>
           <Route path="/" element={<MenuPage />} />
           <Route path="/login" element={<Login />} />

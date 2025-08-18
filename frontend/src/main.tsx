@@ -10,7 +10,13 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ConfigProvider theme={{ algorithm: antdTheme.defaultAlgorithm }}>
+    <ConfigProvider theme={{
+      algorithm: antdTheme.darkAlgorithm,
+      token: {
+        colorPrimary: '#4f46e5',
+        colorTextBase: '#e5e7eb'
+      }
+    }}>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <App />

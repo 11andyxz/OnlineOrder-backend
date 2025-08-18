@@ -36,7 +36,7 @@ export default function Checkout() {
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
-      <Card className="glass-card">
+      <Card className="glass-card fade-in">
         <Typography.Title level={4} style={{ marginTop: 0 }}>支付方式</Typography.Title>
         <Radio.Group value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
           <Space direction="vertical">
@@ -46,7 +46,7 @@ export default function Checkout() {
           </Space>
         </Radio.Group>
       </Card>
-      <Card className="glass-card">
+      <Card className="glass-card fade-in">
         <Typography.Title level={4} style={{ marginTop: 0 }}>应付金额</Typography.Title>
         <Typography.Title level={2} style={{ margin: 0 }}>¥ {total.toFixed(2)}</Typography.Title>
       </Card>
