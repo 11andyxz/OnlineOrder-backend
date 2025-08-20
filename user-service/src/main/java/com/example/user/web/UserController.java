@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController { // register(email + password) through new user
     private final UserService userService;
     private final Executor appTaskExecutor;
 
@@ -21,7 +21,7 @@ public class UserController {
         this.appTaskExecutor = appTaskExecutor;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/register") //read credentials from the JSON request
     public CompletableFuture<ResponseEntity<?>> register(@Valid @RequestBody UserDtos.RegisterRequest request) {
         return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(ApiResponse.ok(userService.register(request))), appTaskExecutor);
     }
@@ -29,6 +29,14 @@ public class UserController {
     @PostMapping("/login")
     public CompletableFuture<ResponseEntity<?>> login(@Valid @RequestBody UserDtos.LoginRequest request) {
         return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(ApiResponse.ok(userService.login(request))), appTaskExecutor);
+    }
+
+    @DeleteMapping("/delete") //delete account through user email and password
+    public CompletableFuture<ResponseEntity<?>> deleteAccount(@Valid @RequestBody UserDtos.DeleteAccountRequest request) {
+        return CompletableFuture.supplyAsync(() -> {
+            userService.deleteAccount(request);
+            return ResponseEntity.ok(ApiResponse.ok("Account deleted successfully"));
+        }, appTaskExecutor);
     }
 }
 
