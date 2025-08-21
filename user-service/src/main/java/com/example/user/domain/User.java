@@ -26,7 +26,11 @@ public class User { //store user data in the database
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "created_at") //created_at for mysql database
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_type", nullable = false)
+    private UserType userType;
+
+    @Column(name = "created_at") 
     private LocalDateTime createdAt;
 
     @Column(name = "last_login") //last_login for mysql database

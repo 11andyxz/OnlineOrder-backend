@@ -38,5 +38,21 @@ public class UserController { // register(email + password) through new user
             return ResponseEntity.ok(ApiResponse.ok("Account deleted successfully"));
         }, appTaskExecutor);
     }
+
+    @PostMapping("/change-password") //change password with current password verification
+    public CompletableFuture<ResponseEntity<?>> changePassword(@Valid @RequestBody UserDtos.ChangePasswordRequest request) {
+        return CompletableFuture.supplyAsync(() -> {
+            userService.changePassword(request);
+            return ResponseEntity.ok(ApiResponse.ok("Password changed successfully"));
+        }, appTaskExecutor);
+    }
+
+    @GetMapping("/profile") //get user profile information
+    public CompletableFuture<ResponseEntity<?>> getProfile(@RequestParam("email") String email) {
+        return CompletableFuture.supplyAsync(() -> {
+            UserDtos.ProfileView profile = userService.getProfile(email);
+            return ResponseEntity.ok(ApiResponse.ok(profile));
+        }, appTaskExecutor);
+    }
 }
 

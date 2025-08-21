@@ -21,6 +21,7 @@ public class UserDtos {
         private Long id;
         private String email;
         private String name;
+        private String userType;
         private String token;
     }
 
@@ -28,6 +29,24 @@ public class UserDtos {
     public static class DeleteAccountRequest {
         private String email;
         private String password;
+    }
+
+    @Data
+    public static class ChangePasswordRequest {
+        private String email;
+        private String currentPassword;
+        private String newPassword;
+        private String confirmNewPassword;
+    }
+
+    @Data
+    public static class ProfileView {
+        private Long id;
+        private String email;
+        private String name;
+        private String userType;
+        private String createdAt;
+        private String lastLogin;
     }
 }
 

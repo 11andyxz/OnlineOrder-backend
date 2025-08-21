@@ -2,6 +2,7 @@ package com.example.user.service;
 
 import com.example.common.dto.UserDtos;
 import com.example.user.domain.User;
+import com.example.user.domain.UserType;
 import com.example.user.repo.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,11 @@ public class UserService {
         user.setEmail(request.getEmail().toLowerCase()); // Normalize email
         user.setName(request.getName());
         user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
+        
+        // Determine user type based on email domain
+        UserType userType = determineUserType(request.getEmail());
+        user.setUserType(userType);
+        
         return userRepository.save(user);
     }
 
@@ -52,6 +58,35 @@ public class UserService {
     - Must have valid domain with at least one dot
     - Domain must end with at least 2 letters (.com, .org, etc.)
     */
+
+    private UserType determineUserType(String email) {
+        if (email != null && email.toLowerCase().endsWith("@siliconinc.com")) {
+            return UserType.SUPER_ADMIN;
+        }
+        return UserType.REGULAR_USER;
+    }
+
+    /**
+     * Check if a user is a super admin
+     * @param userId the user ID to check
+     * @return true if the user is a super admin, false otherwise
+     */
+    public boolean isSuperAdmin(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> user.getUserType() == UserType.SUPER_ADMIN)
+                .orElse(false);
+    }
+
+    /**
+     * Check if a user is a super admin by email
+     * @param email the user email to check
+     * @return true if the user is a super admin, false otherwise
+     */
+    public boolean isSuperAdmin(String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> user.getUserType() == UserType.SUPER_ADMIN)
+                .orElse(false);
+    }
 
     @Transactional
     public UserDtos.UserView login(UserDtos.LoginRequest request) { //service uses them to authenticate(find by email and check password)
@@ -66,6 +101,7 @@ public class UserService {
         view.setId(user.getId());
         view.setEmail(user.getEmail());
         view.setName(user.getName());
+        view.setUserType(user.getUserType().name());
         view.setToken(jwtService.generateToken(user.getId(), user.getEmail()));
         return view;
     }
@@ -83,6 +119,63 @@ public class UserService {
         
         // Delete the user from database
         userRepository.deleteById(user.getId());
+    }
+
+    @Transactional
+    public void changePassword(UserDtos.ChangePasswordRequest request) {
+        // Find user by email
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        
+        // Verify current password
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPasswordHash())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+        
+        // Validate new password
+        if (request.getNewPassword().length() < 6) {
+            throw new IllegalArgumentException("New password must be at least 6 characters");
+        }
+        
+        // Check if new password and confirm password match
+        if (!request.getNewPassword().equals(request.getConfirmNewPassword())) {
+            throw new IllegalArgumentException("New password and confirm password do not match");
+        }
+        
+        // Check if new password is different from current password
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPasswordHash())) {
+            throw new IllegalArgumentException("New password must be different from current password");
+        }
+        
+        // Update password
+        user.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
+    /**
+     * Get user profile information
+     * @param email the user's email
+     * @return ProfileView containing user information
+     */
+    public UserDtos.ProfileView getProfile(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        
+        UserDtos.ProfileView profile = new UserDtos.ProfileView();
+        profile.setId(user.getId());
+        profile.setEmail(user.getEmail());
+        profile.setName(user.getName());
+        profile.setUserType(user.getUserType().name());
+        
+        // Format dates for better readability
+        if (user.getCreatedAt() != null) {
+            profile.setCreatedAt(user.getCreatedAt().toString());
+        }
+        if (user.getLastLogin() != null) {
+            profile.setLastLogin(user.getLastLogin().toString());
+        }
+        
+        return profile;
     }
 }
 
