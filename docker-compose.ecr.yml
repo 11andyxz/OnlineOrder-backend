@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  discovery:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/discovery:latest
+    build:
+      context: .
+      dockerfile: discovery/Dockerfile
+
+  gateway:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/gateway:latest
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+
+  user-service:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/user-service:latest
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
+
+  menu-service:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/menu-service:latest
+    build:
+      context: .
+      dockerfile: menu-service/Dockerfile
+
+  cart-service:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/cart-service:latest
+    build:
+      context: .
+      dockerfile: cart-service/Dockerfile
+
+  order-service:
+    image: 835474150508.dkr.ecr.us-east-2.amazonaws.com/order-service:latest
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
