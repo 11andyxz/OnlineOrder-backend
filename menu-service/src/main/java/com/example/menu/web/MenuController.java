@@ -45,7 +45,7 @@ public class MenuController {
 
     @PutMapping("/{id}")
     @CacheEvict(value = "menu:list", allEntries = true)
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody MenuDtos.UpsertMenuItemRequest request) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody MenuDtos.UpsertMenuItemRequest request) {
         MenuItem item = menuRepository.findById(id).orElseThrow();
         item.setName(request.getName());
         item.setDescription(request.getDescription());

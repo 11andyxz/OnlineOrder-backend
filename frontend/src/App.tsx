@@ -6,6 +6,10 @@ import Register from '@pages/Register';
 import MenuPage from '@pages/Menu';
 import CartPage from '@pages/Cart';
 import Checkout from '@pages/Checkout';
+import OrderDetail from '@pages/OrderDetail';
+import Profile from '@pages/Profile';
+import AdminPage from '@pages/Admin';
+import OrdersPage from '@pages/Orders';
 import { useAuthStore } from '@store/auth';
 
 const { Header, Content, Footer } = Layout;
@@ -23,7 +27,12 @@ export default function App() {
 
   const items = [
     { key: '/', label: <Link to="/">菜单</Link>, icon: <AppstoreOutlined /> },
-    { key: '/cart', label: <Link to="/cart">购物车</Link>, icon: <ShoppingCartOutlined /> }
+    { key: '/cart', label: <Link to="/cart">购物车</Link>, icon: <ShoppingCartOutlined /> },
+    ...(user ? [
+      { key: '/profile', label: <Link to="/profile">个人中心</Link> },
+      { key: '/orders', label: <Link to="/orders">我的订单</Link> }
+    ] : []),
+    ...(user?.userType === 'SUPER_ADMIN' ? [{ key: '/admin', label: <Link to="/admin">管理</Link> }] : [])
   ];
 
   return (
@@ -64,6 +73,10 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/orders/:orderId" element={<OrderDetail />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Routes>
       </Content>
       <Footer style={{ textAlign: 'center' }}>© {new Date().getFullYear()} Online Ordering</Footer>

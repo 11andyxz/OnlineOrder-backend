@@ -17,9 +17,19 @@ public class OrderController {
     }
 
     @PostMapping("/create/{userId}")
-    public ResponseEntity<?> create(@PathVariable Long userId, @RequestBody OrderDtos.CreateOrderRequest request) {
+    public ResponseEntity<?> create(@PathVariable("userId") Long userId, @RequestBody OrderDtos.CreateOrderRequest request) {
         Order order = orderService.createOrder(userId, request);
         return ResponseEntity.ok(ApiResponse.ok(order));
+    }
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> detail(@PathVariable("orderId") Long orderId) {
+        return ResponseEntity.ok(ApiResponse.ok(orderService.getOrderDetail(orderId)));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> listByUser(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(ApiResponse.ok(orderService.listUserOrders(userId)));
     }
 }
 

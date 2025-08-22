@@ -51,6 +51,7 @@ export interface UserView {
   id: number;
   email: string;
   name: string;
+  userType: UserType;
   token: string;
 }
 
@@ -67,6 +68,24 @@ export interface OrderView {
   items: { menuItemId: number; quantity: number }[];
   amount: number;
   status: OrderStatus;
+}
+
+export type UserType = 'REGULAR_USER' | 'SUPER_ADMIN';
+
+export interface ProfileView {
+  id: number;
+  email: string;
+  name: string;
+  userType: UserType;
+  createdAt: string;
+  lastLogin: string;
+}
+
+export interface ChangePasswordRequest {
+  email: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
 }
 
 
